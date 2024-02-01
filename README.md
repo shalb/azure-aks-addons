@@ -29,7 +29,7 @@ To use this Terraform module to provision an AKS cluster with the specified add-
 
 2. **Configure variables**: Create a `terraform.tfvars` file or provide variables inline to customize your AKS cluster and add-on configurations. For example:
    ```hcl
-   location: {{ .variables.location }}
+   location: "eastus"
    cluster_name = "my-aks-cluster"
    cluster_resource_group_name:"aksClusterResGroup"
    domain_name: "test.cluster.dev"
