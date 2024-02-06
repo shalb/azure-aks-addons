@@ -29,8 +29,6 @@ resource "helm_release" "argocd" {
 	configs:
 	  secret:
 	    argocdServerAdminPasswordMtime: "2021-01-01T00:00:00Z"
-	service:
-	  type: "LoadBalancer"
     EOF
   ]
   set {
