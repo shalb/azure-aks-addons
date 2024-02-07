@@ -135,5 +135,5 @@ No modules.
 
 | Name | Description |
 |------|-------------|
-| <a name="output_argocd_url"></a> [argocd\_url](#output\_argocd\_url) | n/a |
+| <a name="output_argocd_url"></a> [argocd\_url](#output\_argocd\_url) | URL to ArgoCD UI |
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
