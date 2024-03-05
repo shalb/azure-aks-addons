@@ -2,6 +2,7 @@
 resource "helm_release" "external_dns" {
   count      = var.enable_external_dns ? 1 : 0
   name       = "external-dns"
+  namespace  = kubernetes_namespace.external_dns.metadata[0].name
   repository = "https://charts.bitnami.com/bitnami"
   chart      = "external-dns"
   version    = var.external_dns_version
@@ -13,6 +14,7 @@ resource "helm_release" "external_dns" {
     secretName: azure-config-file
       EOF
   ]
+
   set {
     name  = "fullnameOverride"
     value = "external-dns"
@@ -60,7 +62,7 @@ resource "azurerm_federated_identity_credential" "external_dns" {
   parent_id           = azurerm_user_assigned_identity.external_dns[0].id
   audience            = ["api://AzureADTokenExchange"]
   issuer              = data.azurerm_kubernetes_cluster.cluster.oidc_issuer_url
-  subject             = "system:serviceaccount:default:external-dns"
+  subject             = "system:serviceaccount:external-dns:external-dns"
 
   depends_on = [
     azurerm_role_assignment.external_dns_dns,
@@ -73,7 +75,7 @@ resource "kubernetes_secret" "azure_config" {
 
   metadata {
     name      = "azure-config-file"
-    namespace = "default"
+    namespace = kubernetes_namespace.external_dns.metadata[0].name
   }
 
   data = {
@@ -82,5 +84,11 @@ resource "kubernetes_secret" "azure_config" {
       resourceGroup                = var.dns_zone_resource_group_name
       useWorkloadIdentityExtension = true
     })
+  }
+}
+
+resource "kubernetes_namespace" "external_dns" {
+  metadata {
+    name = "external-dns"
   }
 }
